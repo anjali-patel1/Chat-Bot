@@ -1,12 +1,101 @@
-# React + Vite
+# ChatBot — React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A chatbot UI built with React 19 and Vite. It communicates with an external AI API (configured via environment variable) and renders a floating popup-style chat interface.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Project Structure
 
-## Expanding the ESLint configuration
+```
+src/
+├── App.jsx                    # Root component — manages chat history & API calls
+├── main.jsx                   # React entry point
+├── index.css                  # Global styles (Inter font, purple theme)
+└── components/
+    ├── ChatbotIcon.jsx        # Bot avatar SVG icon
+    ├── ChatForm.jsx           # Message input form
+    └── ChatMessage.jsx        # Individual message bubble (user / bot)
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Tech Stack
+
+| Tool | Version |
+|------|---------|
+| React | ^19.1.0 |
+| React DOM | ^19.1.0 |
+| Vite | ^6.3.5 |
+| ESLint | ^9.25.0 |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js
+- npm or yarn
+
+### Install
+
+```bash
+npm install
+```
+
+### Environment Variable
+
+Create a `.env` file in the root and add your API endpoint:
+
+```env
+VITE_API_URL=your_api_endpoint_here
+```
+
+The app sends chat history to this URL using a `POST` request with `{ contents: [...] }` as the body and expects a Google Gemini-compatible response format.
+
+### Run Dev Server
+
+```bash
+npm run dev
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+### Lint
+
+```bash
+npm run lint
+```
+
+---
+
+## How It Works
+
+1. The user types a message in `ChatForm` and submits.
+2. The message is added to `chatHistory` in `App.jsx`.
+3. A `"Thinking..."` placeholder is shown for the bot.
+4. `generateBotResponse` sends the full chat history to `VITE_API_URL`.
+5. The bot's response replaces the placeholder. Markdown bold (`**text**`) is stripped from the response before display.
+
+---
+
+## UI
+
+- Floating popup (420px wide) centered on screen
+- Purple header (`#6D4FC2`) with bot icon and collapse button
+- Scrollable chat body (460px height)
+- Sticky input footer with send button that appears only when text is present
+- Bot messages — light purple bubble, left-aligned
+- User messages — purple bubble, right-aligned
+- Font: Inter (Google Fonts)
+- Icons: Material Symbols Rounded (Google Fonts)
